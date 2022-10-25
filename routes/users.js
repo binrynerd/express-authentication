@@ -20,16 +20,18 @@ router.post("/register", (req, res) => {
   if (!name || !email || !password || !password2) {
     errors.push({ msg: "Fill in all fields" });
   }
+//check password length
+  else if (password.length < 6) {
+    errors.push({ msg: "Password should be atleast 6 characters long" });
+  }
 
   // check passwords match
   if (password !== password2) {
     errors.push({ msg: "Passwords didn't match" });
   }
 
-  //check password length
-  if (password.length < 6) {
-    errors.push({ msg: "Password should be atleast 6 characters long" });
-  }
+  
+  
   // redirecting to home or to validation
 
   if (errors.length > 0) {
@@ -110,6 +112,13 @@ router.post("/update", (req, res) => {
       if (user) {
         if (newPassword.length < 6) {
           update.push({ msg: "New Password must atleast 6 characters long" })
+          res.render("update", {
+            update,
+            email
+          })
+        }
+        if (newPassword===password) {
+          update.push({ msg: "New Password cannot same as old password" })
           res.render("update", {
             update,
             email
